@@ -321,8 +321,6 @@ body {
         flex-direction: column;
     }
 
-    /* Ajuste da lista de pastilhas no celular */
-
     .pastilha {
         flex-direction: column;
         align-items: flex-start;
