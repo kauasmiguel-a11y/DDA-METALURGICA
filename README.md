@@ -1,5 +1,10 @@
 # Sistema de Controle de Estoque de Pastilhas Industriais
 
+## Entrada do sistema
+
+Painel.html
+
+
 ## Sobre o projeto
 
 Este projeto foi desenvolvido para apresentar uma proposta de sistema web para a **DDA Metalúrgica**.
