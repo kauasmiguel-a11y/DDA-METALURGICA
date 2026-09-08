@@ -72,8 +72,8 @@
                     Total de Itens
                 </span>
 
-                <strong>
-                    128
+                <strong id="total-itens">
+                    0
                 </strong>
 
             </div>
@@ -85,8 +85,8 @@
                     Estoque OK
                 </span>
 
-                <strong>
-                    96
+                <strong id="estoque-ok">
+                    0
                 </strong>
 
             </div>
@@ -98,8 +98,8 @@
                     Estoque Baixo
                 </span>
 
-                <strong>
-                    24
+                <strong id="estoque-baixo">
+                    0
                 </strong>
 
             </div>
@@ -111,8 +111,8 @@
                     Estoque Crítico
                 </span>
 
-                <strong>
-                    8
+                <strong id="estoque-critico">
+                    0
                 </strong>
 
             </div>
@@ -128,69 +128,7 @@
 
                 <h3>Alertas de Estoque</h3>
 
-                <div class="alert-list">
-
-                    <div class="alert alert-critical">
-
-                        <div class="alert-content">
-
-                            <strong>
-                                Pastilha TNMG 160408
-                            </strong>
-
-                            <span>
-                                Quantidade: 3 | Mínimo: 10
-                            </span>
-
-                        </div>
-
-                        <span class="status">
-                            Crítico
-                        </span>
-
-                    </div>
-
-
-                    <div class="alert alert-warning">
-
-                        <div class="alert-content">
-
-                            <strong>
-                                Pastilha CNMG 120408
-                            </strong>
-
-                            <span>
-                                Quantidade: 8 | Mínimo: 15
-                            </span>
-
-                        </div>
-
-                        <span class="status">
-                            Baixo
-                        </span>
-
-                    </div>
-
-
-                    <div class="alert alert-warning">
-
-                        <div class="alert-content">
-
-                            <strong>
-                                Pastilha DCMT 070204
-                            </strong>
-
-                            <span>
-                                Quantidade: 12 | Mínimo: 20
-                            </span>
-
-                        </div>
-
-                        <span class="status">
-                            Baixo
-                        </span>
-
-                    </div>
+                <div class="alert-list" id="lista-alertas">
 
                 </div>
 
@@ -214,28 +152,7 @@
 
                     </thead>
 
-                    <tbody>
-
-                        <tr>
-                            <td>10/08/2026</td>
-                            <td>TNMG 160408</td>
-                            <td>Entrada</td>
-                            <td>+50</td>
-                        </tr>
-
-                        <tr>
-                            <td>09/08/2026</td>
-                            <td>CNMG 120408</td>
-                            <td>Saída</td>
-                            <td>-5</td>
-                        </tr>
-
-                        <tr>
-                            <td>08/08/2026</td>
-                            <td>DCMT 070204</td>
-                            <td>Saída</td>
-                            <td>-2</td>
-                        </tr>
+                    <tbody id="lista-movimentacoes">
 
                     </tbody>
 
@@ -255,6 +172,9 @@
         </p>
 
     </footer>
+
+
+    <script src="Painel.js"></script>
 
 </body>
 

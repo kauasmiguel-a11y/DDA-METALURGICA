@@ -12,188 +12,231 @@
 <body>
 
     <!-- HEADER -->
+
     <header class="site-header">
 
         <div class="header-container">
 
             <div class="logo">
+
                 <h1>DDA Metalúrgica</h1>
-                <span>Controle de Estoque</span>
+
+                <span>
+                    Controle de Estoque
+                </span>
+
             </div>
 
+
             <nav class="main-nav">
-                <a href="painel.html" class="nav-link">Dashboard</a>
-                <a href="pastilhas.html" class="nav-link">Pastilhas</a>
-                <a href="fornecedores.html" class="nav-link">Fornecedores</a>
-                <a href="relatorios.html" class="nav-link">Relatórios</a>
+
+                <a href="painel.html" class="nav-link">
+                    Dashboard
+                </a>
+
+                <a href="pastilhas.html" class="nav-link">
+                    Pastilhas
+                </a>
+
+                <a href="fornecedores.html" class="nav-link">
+                    Fornecedores
+                </a>
+
+                <a href="relatorios.html" class="nav-link">
+                    Relatórios
+                </a>
+
             </nav>
 
         </div>
 
     </header>
 
-
-    <!-- CONTEÚDO -->
     <main class="main-container">
 
-        <!-- TÍTULO -->
         <div class="page-header">
 
             <div class="page-title">
-                <h2>Pastilhas</h2>
-                <p>Gerenciamento do estoque de pastilhas.</p>
+
+                <h2>
+                    Pastilhas
+                </h2>
+
+                <p>
+                    Gerenciamento do estoque de pastilhas.
+                </p>
+
             </div>
 
+
             <div class="page-actions">
-                <a href="#form-pastilha">Nova Pastilha</a>
-                <a href="#">Entrada</a>
-                <a href="#">Saída</a>
+
+                <a href="#form-pastilha">
+                    Nova Pastilha
+                </a>
+
+                <a href="#">
+                    Entrada
+                </a>
+
+                <a href="#">
+                    Saída
+                </a>
+
             </div>
 
         </div>
 
-
-        <!-- FILTROS -->
         <section class="filter-panel">
 
             <div class="filter-group">
-                <label for="busca">Buscar</label>
-                <input type="text" id="busca" placeholder="Digite o código ou descrição">
+
+                <label for="busca">
+                    Buscar
+                </label>
+
+                <input
+                    type="text"
+                    id="busca"
+                    placeholder="Digite o código ou descrição"
+                >
+
             </div>
 
+
             <div class="filter-group">
-                <label for="status">Status</label>
+
+                <label for="status">
+                    Status
+                </label>
 
                 <select id="status">
-                    <option value="">Todos</option>
-                    <option value="ok">OK</option>
-                    <option value="baixo">Baixo</option>
-                    <option value="critico">Crítico</option>
+
+                    <option value="">
+                        Todos
+                    </option>
+
+                    <option value="ok">
+                        OK
+                    </option>
+
+                    <option value="baixo">
+                        Baixo
+                    </option>
+
+                    <option value="critico">
+                        Crítico
+                    </option>
+
                 </select>
+
             </div>
 
+
             <div class="filter-group">
-                <label for="fabricante">Fabricante</label>
+
+                <label for="fabricante">
+                    Fabricante
+                </label>
 
                 <select id="fabricante">
-                    <option value="">Todos</option>
-                    <option value="Sandvik">Sandvik</option>
-                    <option value="Kennametal">Kennametal</option>
-                    <option value="Iscar">Iscar</option>
-                    <option value="Mitsubishi">Mitsubishi</option>
+
+                    <option value="">
+                        Todos
+                    </option>
+
+                    <option value="Sandvik">
+                        Sandvik
+                    </option>
+
+                    <option value="Kennametal">
+                        Kennametal
+                    </option>
+
+                    <option value="Iscar">
+                        Iscar
+                    </option>
+
+                    <option value="Mitsubishi">
+                        Mitsubishi
+                    </option>
+
                 </select>
+
             </div>
 
         </section>
 
 
-        <!-- LISTA DE PASTILHAS -->
+        <!-- Lista de pastilhas -->
+
         <section class="panel">
 
             <div class="panel-header">
-                <h3>Itens em Estoque</h3>
+
+                <h3>
+                    Itens em Estoque
+                </h3>
 
                 <span id="contador-pastilhas">
-                    4 itens cadastrados
+                    0 itens cadastrados
                 </span>
+
             </div>
 
 
-            <div id="lista-pastilhas" class="lista-pastilhas">
-
-                <!-- PASTILHA 1 -->
-                <div class="pastilha">
-
-                    <div class="pastilha-info">
-                        <strong>P-001</strong>
-                        <span>Pastilha TNMG 160408</span>
-                        <span>Fabricante: Sandvik</span>
-                    </div>
-
-                    <div class="pastilha-estoque">
-                        <span>Quantidade: 120</span>
-                        <span>Mínimo: 30</span>
-                        <span class="status status-ok">OK</span>
-                    </div>
-
-                </div>
-
-
-                <!-- PASTILHA 2 -->
-                <div class="pastilha">
-
-                    <div class="pastilha-info">
-                        <strong>P-002</strong>
-                        <span>Pastilha CNMG 120408</span>
-                        <span>Fabricante: Kennametal</span>
-                    </div>
-
-                    <div class="pastilha-estoque">
-                        <span>Quantidade: 8</span>
-                        <span>Mínimo: 15</span>
-                        <span class="status status-warning">Baixo</span>
-                    </div>
-
-                </div>
-
-
-                <!-- PASTILHA 3 -->
-                <div class="pastilha">
-
-                    <div class="pastilha-info">
-                        <strong>P-003</strong>
-                        <span>Pastilha DCMT 070204</span>
-                        <span>Fabricante: Iscar</span>
-                    </div>
-
-                    <div class="pastilha-estoque">
-                        <span>Quantidade: 3</span>
-                        <span>Mínimo: 10</span>
-                        <span class="status status-critical">Crítico</span>
-                    </div>
-
-                </div>
-
-
-                <!-- PASTILHA 4 -->
-                <div class="pastilha">
-
-                    <div class="pastilha-info">
-                        <strong>P-004</strong>
-                        <span>Pastilha VBMT 160408</span>
-                        <span>Fabricante: Mitsubishi</span>
-                    </div>
-
-                    <div class="pastilha-estoque">
-                        <span>Quantidade: 45</span>
-                        <span>Mínimo: 25</span>
-                        <span class="status status-ok">OK</span>
-                    </div>
-
-                </div>
+            <div
+                id="lista-pastilhas"
+                class="lista-pastilhas"
+            >
 
             </div>
 
         </section>
 
 
-        <!-- FORMULÁRIO -->
+        <!-- Formulário-->
+
         <section class="form-panel">
 
-            <h3>Nova Pastilha</h3>
+            <h3>
+                Nova Pastilha
+            </h3>
+
 
             <form id="form-pastilha">
 
                 <div class="form-row">
 
                     <div class="form-group">
-                        <label for="codigo">Código</label>
-                        <input type="text" id="codigo" placeholder="Ex: P-000" required>
+
+                        <label for="codigo">
+                            Código
+                        </label>
+
+                        <input
+                            type="text"
+                            id="codigo"
+                            placeholder="Ex: P-000"
+                            required
+                        >
+
                     </div>
 
+
                     <div class="form-group">
-                        <label for="descricao">Descrição</label>
-                        <input type="text" id="descricao" placeholder="Ex: Pastilha TVHF 000000" required>
+
+                        <label for="descricao">
+                            Descrição
+                        </label>
+
+                        <input
+                            type="text"
+                            id="descricao"
+                            placeholder="Ex: Pastilha TVHF 000000"
+                            required
+                        >
+
                     </div>
 
                 </div>
@@ -202,18 +245,48 @@
                 <div class="form-row">
 
                     <div class="form-group">
-                        <label for="fabricante-novo">Fabricante</label>
-                        <input type="text" id="fabricante-novo" placeholder="Ex: Mitsubishi, Iscar..." required>
+
+                        <label for="fabricante-novo">
+                            Fabricante
+                        </label>
+
+                        <input
+                            type="text"
+                            id="fabricante-novo"
+                            placeholder="Ex: Mitsubishi, Iscar..."
+                            required
+                        >
+
                     </div>
 
-                    <div class="form-group">
-                        <label for="estoque-minimo">Estoque mínimo</label>
-                        <input type="number" id="estoque-minimo" required>
-                    </div>
 
                     <div class="form-group">
-                        <label for="quantidade-inicial">Quantidade inicial</label>
-                        <input type="number" id="quantidade-inicial" required>
+
+                        <label for="estoque-minimo">
+                            Estoque mínimo
+                        </label>
+
+                        <input
+                            type="number"
+                            id="estoque-minimo"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="quantidade-inicial">
+                            Quantidade inicial
+                        </label>
+
+                        <input
+                            type="number"
+                            id="quantidade-inicial"
+                            required
+                        >
+
                     </div>
 
                 </div>
@@ -229,16 +302,16 @@
 
     </main>
 
-
-    <!-- FOOTER -->
     <footer class="site-footer">
-        <p>DDA Metalúrgica - Controle de Estoque</p>
+
+        <p>
+            DDA Metalúrgica - Controle de Estoque
+        </p>
+
     </footer>
 
-
-    <!-- JAVASCRIPT -->
-    
     <script src="pastilhas.js"></script>
+
 </body>
 
 </html>
