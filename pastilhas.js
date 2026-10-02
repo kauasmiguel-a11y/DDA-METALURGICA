@@ -1,14 +1,60 @@
+const API_URL = "https://6abb0663b2118ed7abb7de1b.mockapi.io/dda-metalurgica/pastilhas"
+
+async function tratarResposta(resposta) {
+    if (!resposta.ok) {
+        throw new Error(`Erro HTTP: ${resposta.status}`);
+    }
+    return await resposta.json();
+}
+
+//GET geral
+async function listarPastilhas() {
+    const resposta = await fetch(API_URL);
+    return await tratarResposta(resposta);
+}
+
+// GET por id
+async function buscarPastilhaPorId(id) {
+    const resposta = await fetch(`${API_URL}/${id}`);
+    return await tratarResposta(resposta);
+}
+
+//POST
+async function criarPastilha(dados) {
+    const resposta = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dados)
+    });
+    return await tratarResposta(resposta);
+}
+
+//PUT
+async function atualizarPastilha(id, dados) {
+    const resposta = await fetch(`${API_URL}/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dados)
+    });
+    return await tratarResposta(resposta);
+}
+
+// DELETE
+async function excluirPastilha(id) {
+    const resposta = await fetch(`${API_URL}/${id}`, {
+        method: "DELETE"
+    });
+    return await tratarResposta(resposta);
+}
+
+
 const formulario = document.getElementById("form-pastilha");
 const listaPastilhas = document.getElementById("lista-pastilhas");
 const contador = document.getElementById("contador-pastilhas");
 
-const CHAVE_PASTILHAS = "pastilhasDDA";
 const CHAVE_MOVIMENTACOES = "movimentacoesDDA";
 
-
-let pastilhas =
-    JSON.parse(localStorage.getItem(CHAVE_PASTILHAS)) || [];
-
+let pastilhas = [];
 
 function verificarStatus(quantidade, minimo) {
 
@@ -38,13 +84,53 @@ function verificarStatus(quantidade, minimo) {
     };
 }
 
+
+function pastilhasFiltradas() {
+
+    const texto =
+        document.getElementById("busca").value.toLowerCase();
+
+    const status =
+        document.getElementById("status").value;
+
+    const fornecedor =
+        document.getElementById("filtro-fornecedor").value.toLowerCase();
+
+    const classes = {
+        ok: "status-ok",
+        baixo: "status-warning",
+        critico: "status-critical"
+    };
+
+    return pastilhas.filter(function (p) {
+
+        const textoOk =
+            String(p.codigo).toLowerCase().includes(texto) ||
+            String(p.nome).toLowerCase().includes(texto);
+
+        const statusOk =
+            !status ||
+            verificarStatus(p.quantidade, p.minimo).classeStatus === classes[status];
+
+        const fornecedorOk =
+            !fornecedor ||
+            String(p.fornecedor).toLowerCase() === fornecedor;
+
+        return textoOk && statusOk && fornecedorOk;
+
+    });
+}
+
+
 function mostrarPastilhas() {
 
     listaPastilhas.innerHTML = "";
 
-    for (let i = 0; i < pastilhas.length; i++) {
+    const lista = pastilhasFiltradas();
 
-        const pastilha = pastilhas[i];
+    for (let i = 0; i < lista.length; i++) {
+
+        const pastilha = lista[i];
 
         const resultado =
             verificarStatus(
@@ -52,13 +138,10 @@ function mostrarPastilhas() {
                 pastilha.minimo
             );
 
-
         const novaPastilha =
             document.createElement("div");
 
-
         novaPastilha.classList.add("pastilha");
-
 
         novaPastilha.innerHTML = `
             <div class="pastilha-info">
@@ -68,11 +151,19 @@ function mostrarPastilhas() {
                 </strong>
 
                 <span>
-                    ${pastilha.descricao}
+                    ${pastilha.nome}
                 </span>
 
                 <span>
-                    Fabricante: ${pastilha.fabricante}
+                    Categoria: ${pastilha.categoria}
+                </span>
+
+                <span>
+                    Fornecedor: ${pastilha.fornecedor}
+                </span>
+
+                <span>
+                    Preço: R$ ${pastilha.preco || 0}
                 </span>
 
             </div>
@@ -93,160 +184,26 @@ function mostrarPastilhas() {
                 </span>
 
             </div>
-        `;
 
+
+            <div class="pastilha-acoes">
+
+                <button class="btn-ver" data-id="${pastilha.id}">
+                    Ver
+                </button>
+
+                <button class="btn-editar" data-id="${pastilha.id}">
+                    Editar
+                </button>
+
+                <button class="btn-excluir" data-id="${pastilha.id}">
+                    Excluir
+                </button>
+
+            </div>
+        `;
 
         listaPastilhas.appendChild(novaPastilha);
 
     }
-
-
-    contador.textContent =
-        `${pastilhas.length} itens cadastrados`;
 }
-
-
-function registrarMovimentacao(pastilha) {
-
-    let movimentacoes =
-        JSON.parse(
-            localStorage.getItem(CHAVE_MOVIMENTACOES)
-        ) || [];
-
-
-    const dataAtual =
-        new Date();
-
-
-    const data =
-        dataAtual.toLocaleDateString("pt-BR");
-
-
-    const movimentacao = {
-
-        data: data,
-
-        pastilha: pastilha.codigo,
-
-        tipo: "Entrada",
-
-        quantidade: pastilha.quantidade
-
-    };
-
-
-    movimentacoes.unshift(
-        movimentacao
-    );
-
-
-    localStorage.setItem(
-        CHAVE_MOVIMENTACOES,
-        JSON.stringify(movimentacoes)
-    );
-}
-
-
-formulario.addEventListener(
-    "submit",
-    function (event) {
-
-        event.preventDefault();
-
-
-        const codigo =
-            document.getElementById("codigo").value;
-
-
-        const descricao =
-            document.getElementById("descricao").value;
-
-
-        const fabricante =
-            document.getElementById("fabricante-novo").value;
-
-
-        const minimo =
-            Number(
-                document.getElementById("estoque-minimo").value
-            );
-
-
-        const quantidade =
-            Number(
-                document.getElementById("quantidade-inicial").value
-            );
-
-
-        const novaPastilha = {
-
-            codigo: codigo,
-
-            descricao: descricao,
-
-            fabricante: fabricante,
-
-            quantidade: quantidade,
-
-            minimo: minimo
-
-        };
-
-
-        pastilhas.push(
-            novaPastilha
-        );
-
-
-        localStorage.setItem(
-            CHAVE_PASTILHAS,
-            JSON.stringify(pastilhas)
-        );
-
-
-        registrarMovimentacao(
-            novaPastilha
-        );
-
-
-        mostrarPastilhas();
-
-
-        formulario.reset();
-
-        /*
-            Atualiza o Dashboard caso
-            ele esteja aberto na mesma página.
-        */
-
-        window.dispatchEvent(
-            new Event("estoqueAtualizado")
-        );
-
-    }
-);
-
-
-mostrarPastilhas();
-
-window.addEventListener(
-    "storage",
-    function (event) {
-
-        if (
-            event.key === CHAVE_PASTILHAS ||
-            event.key === CHAVE_MOVIMENTACOES
-        ) {
-
-            pastilhas =
-                JSON.parse(
-                    localStorage.getItem(CHAVE_PASTILHAS)
-                ) || [];
-
-
-            mostrarPastilhas();
-
-        }
-
-    }
-);
