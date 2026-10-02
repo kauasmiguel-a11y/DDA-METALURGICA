@@ -10,7 +10,6 @@ body {
     color: #e8edf2;
 }
 
-/* HEADER */
 .site-header {
     background-color: #0f141b;
     border-bottom: 1px solid #2c3a47;
@@ -34,7 +33,6 @@ body {
     font-size: 13px;
 }
 
-/* MENU */
 .main-nav {
     display: flex;
     gap: 8px;
@@ -53,7 +51,6 @@ body {
     color: white;
 }
 
-/* CONTEÚDO */
 .main-container {
     width: 90%;
     max-width: 1200px;
@@ -69,7 +66,6 @@ body {
     margin-bottom: 7px;
 }
 
-/* FORMULÁRIO */
 .form-panel {
     background-color: #1c2733;
     border: 1px solid #2c3a47;
@@ -98,21 +94,7 @@ body {
     margin-bottom: 7px;
 }
 
-.form-group input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #3a4a59;
-    border-radius: 6px;
-    color: black;
-    background-color: white;
-    outline: none;
-}
-
-.form-group input:focus {
-    border-color: #5a9cf8;
-}
-
-/* AVALIAÇÃO */
+.form-group input,
 .form-group select {
     width: 100%;
     padding: 10px;
@@ -123,6 +105,7 @@ body {
     outline: none;
 }
 
+.form-group input:focus,
 .form-group select:focus {
     border-color: #5a9cf8;
 }
@@ -141,7 +124,22 @@ body {
     background-color: #243342;
 }
 
-/* PAINEL */
+#resultadoFornecedor {
+    margin-top: 20px;
+}
+
+.resultado-fornecedor {
+    background-color: #16212c;
+    border: 1px solid #2c3a47;
+    border-radius: 6px;
+    padding: 15px;
+    line-height: 1.8;
+}
+
+.resultado-fornecedor strong {
+    color: #5a9cf8;
+}
+
 .panel {
     background-color: #1c2733;
     border: 1px solid #2c3a47;
@@ -166,13 +164,12 @@ body {
     color: #9aa9b8;
 }
 
-/* LISTA */
 .lista-fornecedores {
     width: 100%;
 }
 
-/* CABEÇALHO DAS COLUNAS */
-.fornecedor-cabecalho {
+.fornecedor-cabecalho,
+.fornecedor-item {
     display: grid;
     grid-template-columns:
         2fr
@@ -180,8 +177,12 @@ body {
         1.5fr
         1.5fr
         1fr
-        1fr;
+        1fr
+        0.8fr;
     align-items: center;
+}
+
+.fornecedor-cabecalho {
     background-color: #16212c;
     padding: 14px;
     font-size: 13px;
@@ -192,22 +193,11 @@ body {
     min-width: 0;
 }
 
-/* ÁREA DOS FORNECEDORES */
 #listaFornecedores {
     width: 100%;
 }
 
-/* CADA FORNECEDOR */
 .fornecedor-item {
-    display: grid;
-    grid-template-columns:
-        2fr
-        1.5fr
-        1.5fr
-        1.5fr
-        1fr
-        1fr;
-    align-items: center;
     padding: 14px;
     border-top: 1px solid #2c3a47;
     font-size: 14px;
@@ -218,9 +208,6 @@ body {
     background-color: #243342;
 }
 
-
-
-/* DADOS */
 .fornecedor-dado {
     display: flex;
     align-items: center;
@@ -228,38 +215,24 @@ body {
     padding-right: 10px;
 }
 
-/* NOME */
 .fornecedor-nome {
-    font-weight: normal;
     color: #e8edf2;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-/* CNPJ */
-.fornecedor-cnpj {
-    color: #c5ced8;
-}
-
-/* TELEFONE */
-.fornecedor-telefone {
-    color: #c5ced8;
-}
-
-/* CIDADE */
+.fornecedor-cnpj,
+.fornecedor-telefone,
 .fornecedor-cidade {
     color: #c5ced8;
 }
 
-/* AVALIAÇÃO */
 .fornecedor-avaliacao {
-    font-weight: normal;
     color: #f2c94c;
     letter-spacing: 2px;
 }
 
-/* STATUS */
 .fornecedor-status {
     display: flex;
     align-items: center;
@@ -270,7 +243,6 @@ body {
     padding: 5px 10px;
     border-radius: 15px;
     font-size: 12px;
-    font-weight: normal;
 }
 
 .status-ok {
@@ -281,9 +253,14 @@ body {
     color: #f2c94c;
 }
 
-/* BOTÃO EXCLUIR */
+.fornecedor-acoes {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-editar,
 .btn-excluir {
-    background-color: #c0392b;
     color: white;
     border: none;
     border-radius: 6px;
@@ -293,11 +270,22 @@ body {
     transition: background-color 0.2s;
 }
 
+.btn-editar {
+    background-color: #2f80ed;
+}
+
+.btn-editar:hover {
+    background-color: #5a9cf8;
+}
+
+.btn-excluir {
+    background-color: #c0392b;
+}
+
 .btn-excluir:hover {
     background-color: #e74c3c;
 }
 
-/* FOOTER */
 .site-footer {
     text-align: center;
     border-top: 1px solid #2c3a47;
@@ -307,7 +295,6 @@ body {
     margin-top: 30px;
 }
 
-/* RESPONSIVO */
 @media (max-width: 800px) {
 
     .header-container {
@@ -330,7 +317,6 @@ body {
     }
 
     .fornecedor-item {
-        display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 10px;
         padding: 15px;
@@ -343,9 +329,12 @@ body {
     .fornecedor-nome {
         white-space: normal;
     }
+
+    .fornecedor-acoes {
+        flex-wrap: wrap;
+    }
 }
 
-/* CELULARES PEQUENOS */
 @media (max-width: 500px) {
 
     .main-container {

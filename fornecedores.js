@@ -1,38 +1,197 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-    console.log("JavaScript carregado com sucesso!");
+    // API
 
-    // ELEMENTOS DO HTML
-    const form = document.getElementById("formFornecedor");
-    const lista = document.getElementById("listaFornecedores");
-    const contador = document.getElementById("contador");
+    const API_URL =
+        "https://6abafbac5b549d818d62c1c5.mockapi.io/dda-metalurgica/fornecedores";
 
-    // VERIFICAR SE OS ELEMENTOS EXISTEM
-    if (!form) {
-        console.error("ERRO: formulário #formFornecedor não foi encontrado.");
+    window.fornecedorEditandoId = null;
+
+
+    async function buscarFornecedores() {
+        try {
+            const resposta = await fetch(API_URL);
+
+            if (!resposta.ok) {
+                console.error(
+                    "Erro ao buscar fornecedores:",
+                    resposta.status
+                );
+                return;
+            }
+
+            const fornecedores = await resposta.json();
+
+            atualizarLista(fornecedores);
+
+        } catch (erro) {
+            console.error("Erro na requisição GET:", erro);
+        }
+    }
+
+
+    async function buscarFornecedorPorId(id) {
+        try {
+            const resposta =
+                await fetch(`${API_URL}/${id}`);
+
+            if (!resposta.ok) {
+                console.error(
+                    "Fornecedor não encontrado:",
+                    resposta.status
+                );
+                return null;
+            }
+
+            return await resposta.json();
+
+        } catch (erro) {
+            console.error(
+                "Erro ao buscar fornecedor por ID:",
+                erro
+            );
+            return null;
+        }
+    }
+
+
+    async function cadastrarFornecedor(fornecedor) {
+        try {
+            const resposta = await fetch(API_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(fornecedor)
+            });
+
+            if (!resposta.ok) {
+                console.error(
+                    "Erro ao cadastrar fornecedor:",
+                    resposta.status
+                );
+                return false;
+            }
+
+            const novoFornecedor = await resposta.json();
+
+            console.log(
+                "Fornecedor cadastrado:",
+                novoFornecedor
+            );
+
+            await buscarFornecedores();
+
+            return true;
+
+        } catch (erro) {
+            console.error(
+                "Erro na requisição POST:",
+                erro
+            );
+            return false;
+        }
+    }
+
+
+    async function atualizarFornecedor(id, fornecedor) {
+        try {
+            const resposta =
+                await fetch(`${API_URL}/${id}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(fornecedor)
+                });
+
+            if (!resposta.ok) {
+                console.error(
+                    "Erro ao atualizar fornecedor:",
+                    resposta.status
+                );
+                return false;
+            }
+
+            const fornecedorAtualizado =
+                await resposta.json();
+
+            console.log(
+                "Fornecedor atualizado:",
+                fornecedorAtualizado
+            );
+
+            await buscarFornecedores();
+
+            return true;
+
+        } catch (erro) {
+            console.error(
+                "Erro na requisição PUT:",
+                erro
+            );
+            return false;
+        }
+    }
+
+
+    async function excluirFornecedor(id) {
+        try {
+            const resposta =
+                await fetch(`${API_URL}/${id}`, {
+                    method: "DELETE"
+                });
+
+            if (!resposta.ok) {
+                console.error(
+                    "Erro ao excluir fornecedor:",
+                    resposta.status
+                );
+                return;
+            }
+
+            console.log(
+                "Fornecedor excluído:",
+                id
+            );
+
+            await buscarFornecedores();
+
+        } catch (erro) {
+            console.error(
+                "Erro na requisição DELETE:",
+                erro
+            );
+        }
+    }
+
+
+    // Elementos
+
+    const lista =
+        document.getElementById("listaFornecedores");
+
+    const contador =
+        document.getElementById("contador");
+
+    const botaoSalvar =
+        document.getElementById("btnSalvarFornecedor");
+
+    const tituloFormulario =
+        document.getElementById("tituloFormulario");
+
+
+    if (!lista || !contador) {
+        console.error(
+            "Erro: elementos principais não encontrados."
+        );
         return;
     }
 
-    if (!lista) {
-        console.error("ERRO: elemento #listaFornecedores não foi encontrado.");
-        return;
-    }
 
-    if (!contador) {
-        console.error("ERRO: elemento #contador não foi encontrado.");
-        return;
-    }
+    // Lista
 
-    // CARREGAR FORNECEDORES DO LOCALSTORAGE
-    let fornecedores = JSON.parse(
-        localStorage.getItem("fornecedores")
-    ) || [];
-
-    console.log("Fornecedores carregados:", fornecedores);
-
-    // GERAR ESTRELAS DA AVALIAÇÃO
     function gerarEstrelas(avaliacao) {
-
         if (!avaliacao || avaliacao === "-") {
             return "-";
         }
@@ -40,9 +199,8 @@ document.addEventListener("DOMContentLoaded", function () {
         return "★".repeat(Number(avaliacao));
     }
 
-    // ATUALIZAR LISTA
-    function atualizarLista() {
 
+    function atualizarLista(fornecedores) {
         lista.innerHTML = "";
 
         if (fornecedores.length === 0) {
@@ -52,7 +210,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         fornecedores.forEach(function (fornecedor) {
 
-            const item = document.createElement("div");
+            const item =
+                document.createElement("div");
 
             item.classList.add("fornecedor-item");
 
@@ -82,135 +241,92 @@ document.addEventListener("DOMContentLoaded", function () {
                         ${fornecedor.status || "Ativo"}
                     </span>
                 </div>
+
+                <div class="fornecedor-acoes">
+                    <button
+                        type="button"
+                        class="btn-editar"
+                        onclick="editarFornecedor('${fornecedor.id}')">
+                        Editar
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn-excluir"
+                        onclick="excluirFornecedor('${fornecedor.id}')">
+                        Excluir
+                    </button>
+                </div>
             `;
 
             lista.appendChild(item);
-
         });
 
-        if (fornecedores.length === 1) {
-
-            contador.textContent = "1 fornecedor";
-
-        } else {
-
-            contador.textContent =
-                fornecedores.length + " fornecedores";
-
-        }
-
-        console.log("Lista atualizada:", fornecedores);
+        contador.textContent =
+            fornecedores.length === 1
+                ? "1 fornecedor"
+                : fornecedores.length + " fornecedores";
     }
 
-    // CADASTRAR FORNECEDOR
-    form.addEventListener("submit", function (event) {
 
-        event.preventDefault();
+    async function editarFornecedor(id) {
+        const fornecedor =
+            await buscarFornecedorPorId(id);
 
-        console.log("Formulário enviado!");
-
-        const nome =
-            document.getElementById("nome").value.trim();
-
-        const cnpj =
-            document.getElementById("cnpj").value.trim();
-
-        const telefone =
-            document.getElementById("telefone").value.trim();
-
-        const email =
-            document.getElementById("email").value.trim();
-
-        const cidade =
-            document.getElementById("cidade").value.trim();
-
-        const avaliacao =
-            document.getElementById("avaliacao").value;
-
-
-        console.log("Dados preenchidos:", {
-            nome,
-            cnpj,
-            telefone,
-            email,
-            cidade,
-            avaliacao
-        });
-
-
-        // VALIDAR CAMPOS
-        if (
-            nome === "" ||
-            cnpj === "" ||
-            telefone === "" ||
-            email === "" ||
-            cidade === "" ||
-            avaliacao === ""
-        ) {
-
-            alert("Preencha todos os campos!");
-
+        if (!fornecedor) {
+            alert("Fornecedor não encontrado.");
             return;
         }
 
+        document.getElementById("nome").value =
+            fornecedor.nome || "";
 
-        // CRIAR NOVO FORNECEDOR
-        const novoFornecedor = {
+        document.getElementById("cnpj").value =
+            fornecedor.cnpj || "";
 
-            nome: nome,
+        document.getElementById("telefone").value =
+            fornecedor.telefone || "";
 
-            cnpj: cnpj,
+        document.getElementById("email").value =
+            fornecedor.email || "";
 
-            telefone: telefone,
+        document.getElementById("cidade").value =
+            fornecedor.cidade || "";
 
-            email: email,
+        document.getElementById("avaliacao").value =
+            fornecedor.avaliacao || "";
 
-            cidade: cidade,
+        window.fornecedorEditandoId = id;
 
-            avaliacao: avaliacao,
+        tituloFormulario.textContent =
+            "Editar Fornecedor";
 
-            status: "Ativo",
+        botaoSalvar.textContent =
+            "Atualizar Fornecedor";
 
-            statusClass: "status-ok"
-
-        };
-
-
-        console.log("Novo fornecedor:", novoFornecedor);
-
-
-        // ADICIONAR NA LISTA
-        fornecedores.push(novoFornecedor);
-
-
-        // SALVAR NO LOCALSTORAGE
-        localStorage.setItem(
-            "fornecedores",
-            JSON.stringify(fornecedores)
-        );
+        document.getElementById("nome").focus();
+    }
 
 
-        console.log(
-            "Salvo no LocalStorage:",
-            localStorage.getItem("fornecedores")
-        );
+    window.buscarFornecedorPorId =
+        buscarFornecedorPorId;
+
+    window.cadastrarFornecedor =
+        cadastrarFornecedor;
+
+    window.atualizarFornecedor =
+        atualizarFornecedor;
+
+    window.editarFornecedor =
+        editarFornecedor;
+
+    window.excluirFornecedor =
+        excluirFornecedor;
+
+    window.gerarEstrelas =
+        gerarEstrelas;
 
 
-        // ATUALIZAR LISTA
-        atualizarLista();
-
-
-        // LIMPAR FORMULÁRIO
-        form.reset();
-
-
-        // AVISO
-        alert("Fornecedor cadastrado com sucesso!");
-
-    });
-
-
-    // CARREGAR LISTA AO ABRIR
-    atualizarLista();
+    buscarFornecedores();
 
 });

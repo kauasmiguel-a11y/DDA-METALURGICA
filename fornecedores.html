@@ -1,354 +1,160 @@
-```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>DDA Metalúrgica | Fornecedores</title>
-
     <link rel="stylesheet" href="fornecedores.css">
-
 </head>
-
 
 <body>
 
-
-
-    <!-- HEADER -->
-
     <header class="site-header">
-
         <div class="header-container">
 
             <div class="logo">
-
                 <h1>DDA Metalúrgica</h1>
-
                 <span>Controle de Estoque</span>
-
             </div>
 
-
             <nav class="main-nav">
-
-                <a href="painel.html" class="nav-link">
-                    Dashboard
-                </a>
-
-                <a href="pastilhas.html" class="nav-link">
-                    Pastilhas
-                </a>
-
-                <a href="fornecedores.html" class="nav-link active">
-                    Fornecedores
-                </a>
-
-                <a href="relatorios.html" class="nav-link">
-                    Relatórios
-                </a>
-
+                <a href="painel.html" class="nav-link">Dashboard</a>
+                <a href="pastilhas.html" class="nav-link">Pastilhas</a>
+                <a href="fornecedores.html" class="nav-link active">Fornecedores</a>
+                <a href="relatorios.html" class="nav-link">Relatórios</a>
             </nav>
 
         </div>
-
     </header>
-
-
-
-
-    <!-- CONTEÚDO PRINCIPAL -->
-
 
     <main class="main-container">
 
-
-
-        <!-- TÍTULO DA PÁGINA -->
-
-
         <section class="page-header">
-
             <div class="page-title">
-
                 <h2>Fornecedores</h2>
-
-                <p>
-                    Cadastro e consulta de fornecedores.
-                </p>
-
+                <p>Cadastro e consulta de fornecedores.</p>
             </div>
-
         </section>
-
-
-
-
-        <!-- CADASTRO DE FORNECEDOR -->
-
 
         <section class="form-panel">
 
-            <h3>Novo Fornecedor</h3>
-
-
-            <!-- IMPORTANTE:
-                 O ID abaixo será usado pelo JavaScript
-            -->
+            <h3 id="tituloFormulario">Novo Fornecedor</h3>
 
             <form id="formFornecedor">
 
-
-                <!-- NOME E CNPJ -->
-
                 <div class="form-row">
 
-
                     <div class="form-group">
-
-                        <label for="nome">
-                            Nome / Razão Social
-                        </label>
-
+                        <label for="nome">Nome / Razão Social</label>
                         <input type="text" id="nome" name="nome" placeholder="Nome do fornecedor">
-
                     </div>
 
-
-
                     <div class="form-group">
-
-                        <label for="cnpj">
-                            CNPJ
-                        </label>
-
+                        <label for="cnpj">CNPJ</label>
                         <input type="text" id="cnpj" name="cnpj" placeholder="00.000.000/0000-00">
-
                     </div>
-
 
                 </div>
 
-
-
-                <!-- TELEFONE, E-MAIL E CIDADE -->
-
                 <div class="form-row">
 
-
                     <div class="form-group">
-
-                        <label for="telefone">
-                            Telefone
-                        </label>
-
+                        <label for="telefone">Telefone</label>
                         <input type="tel" id="telefone" name="telefone" placeholder="(00) 0000-0000">
-
                     </div>
 
-
-
                     <div class="form-group">
-
-                        <label for="email">
-                            E-mail
-                        </label>
-
+                        <label for="email">E-mail</label>
                         <input type="email" id="email" name="email" placeholder="contato@empresa.com">
-
                     </div>
-
-
 
                     <div class="form-group">
-
-                        <label for="cidade">
-                            Cidade
-                        </label>
-
+                        <label for="cidade">Cidade</label>
                         <input type="text" id="cidade" name="cidade" placeholder="Cidade">
-
                     </div>
-
 
                 </div>
-
-
-
-
-                <!-- AVALIAÇÃO -->
 
                 <div class="form-row">
 
                     <div class="form-group">
-
-                        <label for="avaliacao">
-                            Avaliação
-                        </label>
+                        <label for="avaliacao">Avaliação</label>
 
                         <select id="avaliacao" name="avaliacao">
-
-                            <option value="">
-                                Selecione a avaliação
-                            </option>
-
-                            <option value="1">
-                                ★
-                            </option>
-
-                            <option value="2">
-                                ★★
-                            </option>
-
-                            <option value="3">
-                                ★★★
-                            </option>
-
-                            <option value="4">
-                                ★★★★
-                            </option>
-
-                            <option value="5">
-                                ★★★★★
-                            </option>
-
+                            <option value="">Selecione a avaliação</option>
+                            <option value="1">★</option>
+                            <option value="2">★★</option>
+                            <option value="3">★★★</option>
+                            <option value="4">★★★★</option>
+                            <option value="5">★★★★★</option>
                         </select>
-
                     </div>
 
                 </div>
 
-
-
-                <!-- BOTÃO -->
-
-                <button type="submit">
+                <button type="submit" id="btnSalvarFornecedor">
                     Cadastrar Fornecedor
                 </button>
-
 
             </form>
 
         </section>
 
+        <section class="form-panel">
 
+            <h3>Buscar Fornecedor por ID</h3>
 
+            <div class="form-row">
 
-        <!-- LISTA DE FORNECEDORES -->
-
-
-        <section class="panel">
-
-
-            <!-- CABEÇALHO DO PAINEL -->
-
-            <div class="panel-header">
-
-                <h3>
-                    Fornecedores Cadastrados
-                </h3>
-
-
-                <!--
-                    alterar
-                    este número automaticamente.
-                -->
-
-                <span id="contador">
-                    0 fornecedores
-                </span>
+                <div class="form-group">
+                    <label for="idFornecedor">ID do Fornecedor</label>
+                    <input type="text" id="idFornecedor" placeholder="Digite o ID">
+                </div>
 
             </div>
 
+            <button type="button" id="btnBuscarFornecedor">
+                Buscar Fornecedor
+            </button>
 
+            <div id="resultadoFornecedor"></div>
+
+        </section>
+
+        <section class="panel">
+
+            <div class="panel-header">
+                <h3>Fornecedores Cadastrados</h3>
+                <span id="contador">0 fornecedores</span>
+            </div>
 
             <div class="lista-fornecedores">
 
-
-
-                <!-- CABEÇALHO DAS COLUNAS -->
-
                 <div class="fornecedor-cabecalho">
-
-
-                    <div class="coluna">
-                        Fornecedor
-                    </div>
-
-
-                    <div class="coluna">
-                        CNPJ
-                    </div>
-
-
-                    <div class="coluna">
-                        Telefone
-                    </div>
-
-
-                    <div class="coluna">
-                        Cidade
-                    </div>
-
-
-                    <div class="coluna">
-                        Avaliação
-                    </div>
-
-
-                    <div class="coluna">
-                        Status
-                    </div>
-
-
+                    <div class="coluna">Fornecedor</div>
+                    <div class="coluna">CNPJ</div>
+                    <div class="coluna">Telefone</div>
+                    <div class="coluna">Cidade</div>
+                    <div class="coluna">Avaliação</div>
+                    <div class="coluna">Status</div>
+                    <div class="coluna">Ações</div>
                 </div>
 
-
-
-
-                <!-- LISTA DINÂMICA
-                     
-                      inserir
-                     os fornecedores aqui. -->
-
-
-                <div id="listaFornecedores">
-
-                </div>
-
+                <div id="listaFornecedores"></div>
 
             </div>
 
         </section>
 
-
     </main>
 
-
-
-
-    <!-- FOOTER - rodaper-->
-
-
     <footer class="site-footer">
-
-        <p>
-            DDA Metalúrgica - Sistema de Controle de Estoque
-        </p>
-
+        <p>DDA Metalúrgica - Sistema de Controle de Estoque</p>
     </footer>
 
-
-
-
     <script src="fornecedores.js"></script>
-
 
 </body>
 
 </html>
-```
