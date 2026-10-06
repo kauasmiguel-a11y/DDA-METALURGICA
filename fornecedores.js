@@ -95,12 +95,74 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     async function atualizarFornecedor(id, fornecedor) {
+        try {
+            const resposta =
+                await fetch(`${API_URL}/${id}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(fornecedor)
+                });
 
+            if (!resposta.ok) {
+                console.error(
+                    "Erro ao atualizar fornecedor:",
+                    resposta.status
+                );
+                return false;
+            }
+
+            const fornecedorAtualizado =
+                await resposta.json();
+
+            console.log(
+                "Fornecedor atualizado:",
+                fornecedorAtualizado
+            );
+
+            await buscarFornecedores();
+
+            return true;
+
+        } catch (erro) {
+            console.error(
+                "Erro na requisição PUT:",
+                erro
+            );
+            return false;
+        }
     }
 
 
     async function excluirFornecedor(id) {
- 
+        try {
+            const resposta =
+                await fetch(`${API_URL}/${id}`, {
+                    method: "DELETE"
+                });
+
+            if (!resposta.ok) {
+                console.error(
+                    "Erro ao excluir fornecedor:",
+                    resposta.status
+                );
+                return;
+            }
+
+            console.log(
+                "Fornecedor excluído:",
+                id
+            );
+
+            await buscarFornecedores();
+
+        } catch (erro) {
+            console.error(
+                "Erro na requisição DELETE:",
+                erro
+            );
+        }
     }
 
 
