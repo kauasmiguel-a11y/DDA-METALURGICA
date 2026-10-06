@@ -29,6 +29,24 @@ async function criarPastilha(dados) {
     return await tratarResposta(resposta);
 }
 
+// PUT
+async function atualizarPastilha(id, dados) {
+    const resposta = await fetch(`${API_URL}/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dados)
+    });
+    return await tratarResposta(resposta);
+}
+
+// DELETE
+async function excluirPastilha(id) {
+    const resposta = await fetch(`${API_URL}/${id}`, {
+        method: "DELETE"
+    });
+    return await tratarResposta(resposta);
+}
+
 const formulario = document.getElementById("form-pastilha");
 const listaPastilhas = document.getElementById("lista-pastilhas");
 const contador = document.getElementById("contador-pastilhas");
