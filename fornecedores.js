@@ -381,6 +381,43 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
+            // Validar nome
+            if (!/^[A-Za-zÀ-ÿ\s]+$/.test(nome)) {
+                alert("O nome deve conter apenas letras e espaços!");
+                return;
+            }
+
+            // Validar CNPJ
+            const cnpjNumeros = cnpj.replace(/\D/g, "");
+
+            if (cnpjNumeros.length !== 14) {
+                alert("O CNPJ deve conter 14 números!");
+                return;
+            }
+
+            // Validar telefone
+            const telefoneNumeros = telefone.replace(/\D/g, "");
+
+            if (
+                telefoneNumeros.length < 10 ||
+                telefoneNumeros.length > 11
+            ) {
+                alert("O telefone deve conter 10 ou 11 números!");
+                return;
+            }
+
+            // Validar e-mail
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                alert("Digite um e-mail válido!");
+                return;
+            }
+
+            // Validar cidade
+            if (!/^[A-Za-zÀ-ÿ\s'-]+$/.test(cidade)) {
+                alert("A cidade deve conter apenas letras e espaços!");
+                return;
+            }
+
             const fornecedor = {
                 nome: nome,
                 cnpj: cnpj,
@@ -484,5 +521,42 @@ document.addEventListener("DOMContentLoaded", function () {
             `;
         }
     );
+
+    // Campos do formulário
+    const campoNome = document.getElementById("nome");
+    const campoCidade = document.getElementById("cidade");
+    const campoCnpj = document.getElementById("cnpj");
+    const campoTelefone = document.getElementById("telefone");
+
+    // Nome: letras e espaços, sempre maiúsculo
+    campoNome.addEventListener("input", function () {
+        this.value = this.value
+            .replace(/[^A-Za-zÀ-ÿ\s]/g, "")
+            .toLocaleLowerCase("pt-BR")
+            .replace(/(^|\s)\S/g, function (letra) {
+                return letra.toLocaleUpperCase("pt-BR");
+            });
+
+    });
+
+    // Cidade: letras e espaços, sempre maiúsculo
+    campoCidade.addEventListener("input", function () {
+        this.value = this.value
+            .replace(/[^A-Za-zÀ-ÿ\s]/g, "")
+            .toLocaleLowerCase("pt-BR")
+            .replace(/(^|\s)\S/g, function (letra) {
+                return letra.toLocaleUpperCase("pt-BR");
+            });
+    });
+
+    // CNPJ: somente números, máximo 14
+    campoCnpj.addEventListener("input", function () {
+        this.value = this.value.replace(/\D/g, "").slice(0, 14);
+    });
+
+    // Telefone: somente números, máximo 11
+    campoTelefone.addEventListener("input", function () {
+        this.value = this.value.replace(/\D/g, "").slice(0, 11);
+    });
 
 });
