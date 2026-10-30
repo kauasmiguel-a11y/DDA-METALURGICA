@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -47,12 +48,14 @@
 
                     <div class="form-group">
                         <label for="nome">Nome / Razão Social</label>
-                        <input type="text" id="nome" name="nome" placeholder="Nome do fornecedor">
+                        <input type="text" id="nome" name="nome"
+                            placeholder="Nome do fornecedor" required>
                     </div>
 
                     <div class="form-group">
                         <label for="cnpj">CNPJ</label>
-                        <input type="text" id="cnpj" name="cnpj" placeholder="00.000.000/0000-00">
+                        <input type="text" id="cnpj" name="cnpj"
+                            placeholder="00.000.000/0000-00" required>
                     </div>
 
                 </div>
@@ -61,17 +64,20 @@
 
                     <div class="form-group">
                         <label for="telefone">Telefone</label>
-                        <input type="tel" id="telefone" name="telefone" placeholder="(00) 0000-0000">
+                        <input type="tel" id="telefone" name="telefone"
+                            placeholder="(00) 0000-0000" required>
                     </div>
 
                     <div class="form-group">
                         <label for="email">E-mail</label>
-                        <input type="email" id="email" name="email" placeholder="contato@empresa.com">
+                        <input type="email" id="email" name="email"
+                            placeholder="contato@empresa.com" required>
                     </div>
 
                     <div class="form-group">
                         <label for="cidade">Cidade</label>
-                        <input type="text" id="cidade" name="cidade" placeholder="Cidade">
+                        <input type="text" id="cidade" name="cidade"
+                            placeholder="Cidade" required>
                     </div>
 
                 </div>
@@ -81,7 +87,7 @@
                     <div class="form-group">
                         <label for="avaliacao">Avaliação</label>
 
-                        <select id="avaliacao" name="avaliacao">
+                        <select id="avaliacao" name="avaliacao" required>
                             <option value="">Selecione a avaliação</option>
                             <option value="1">★</option>
                             <option value="2">★★</option>
@@ -109,7 +115,8 @@
 
                 <div class="form-group">
                     <label for="idFornecedor">ID do Fornecedor</label>
-                    <input type="text" id="idFornecedor" placeholder="Digite o ID">
+                    <input type="number" id="idFornecedor"
+                        min="1" step="1" placeholder="Digite o ID">
                 </div>
 
             </div>
@@ -132,6 +139,7 @@
             <div class="lista-fornecedores">
 
                 <div class="fornecedor-cabecalho">
+                    <div class="coluna">ID</div>
                     <div class="coluna">Fornecedor</div>
                     <div class="coluna">CNPJ</div>
                     <div class="coluna">Telefone</div>
@@ -156,5 +164,4 @@
     <script src="fornecedores.js"></script>
 
 </body>
-
 </html>

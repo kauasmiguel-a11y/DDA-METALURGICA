@@ -1,3 +1,4 @@
+
 * {
     margin: 0;
     padding: 0;
@@ -86,6 +87,7 @@ body {
 .form-group {
     flex: 1;
     margin-bottom: 15px;
+    min-width: 0;
 }
 
 .form-group label {
@@ -134,6 +136,7 @@ body {
     border-radius: 6px;
     padding: 15px;
     line-height: 1.8;
+    overflow-wrap: anywhere;
 }
 
 .resultado-fornecedor strong {
@@ -166,12 +169,14 @@ body {
 
 .lista-fornecedores {
     width: 100%;
+    overflow-x: auto;
 }
 
 .fornecedor-cabecalho,
 .fornecedor-item {
     display: grid;
     grid-template-columns:
+        0.6fr
         2fr
         1.5fr
         1.5fr
@@ -180,6 +185,7 @@ body {
         1fr
         0.8fr;
     align-items: center;
+    min-width: 850px;
 }
 
 .fornecedor-cabecalho {
@@ -213,6 +219,7 @@ body {
     align-items: center;
     min-width: 0;
     padding-right: 10px;
+    overflow-wrap: anywhere;
 }
 
 .fornecedor-nome {
@@ -317,6 +324,7 @@ body {
     }
 
     .fornecedor-item {
+        min-width: 0;
         grid-template-columns: 1fr 1fr;
         gap: 10px;
         padding: 15px;

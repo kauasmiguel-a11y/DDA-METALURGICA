@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", function () {
 
     // API
@@ -7,16 +8,53 @@ document.addEventListener("DOMContentLoaded", function () {
 
     window.fornecedorEditandoId = null;
 
+    // Elementos
+
+    const lista = document.getElementById("listaFornecedores");
+    const contador = document.getElementById("contador");
+    const botaoSalvar = document.getElementById("btnSalvarFornecedor");
+    const tituloFormulario = document.getElementById("tituloFormulario");
+    const form = document.getElementById("formFornecedor");
+
+    const botaoBuscar = document.getElementById("btnBuscarFornecedor");
+    const inputId = document.getElementById("idFornecedor");
+    const resultadoFornecedor = document.getElementById("resultadoFornecedor");
+
+    const campoNome = document.getElementById("nome");
+    const campoCidade = document.getElementById("cidade");
+    const campoCnpj = document.getElementById("cnpj");
+    const campoTelefone = document.getElementById("telefone");
+
+    if (!lista || !contador || !form) {
+        console.error("Erro: elementos principais não encontrados.");
+        return;
+    }
+
+    // Proteção dos dados exibidos no HTML
+
+    function escaparHTML(valor) {
+        return String(valor ?? "").replace(/[&<>"']/g, function (caractere) {
+            const caracteres = {
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;"
+            };
+
+            return caracteres[caractere];
+        });
+    }
+
+    // Buscar todos os fornecedores
 
     async function buscarFornecedores() {
+
         try {
             const resposta = await fetch(API_URL);
 
             if (!resposta.ok) {
-                console.error(
-                    "Erro ao buscar fornecedores:",
-                    resposta.status
-                );
+                console.error("Erro ao buscar fornecedores:", resposta.status);
                 return;
             }
 
@@ -29,33 +67,30 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    // Buscar fornecedor por ID
 
     async function buscarFornecedorPorId(id) {
+
         try {
-            const resposta =
-                await fetch(`${API_URL}/${id}`);
+            const resposta = await fetch(`${API_URL}/${id}`);
 
             if (!resposta.ok) {
-                console.error(
-                    "Fornecedor não encontrado:",
-                    resposta.status
-                );
+                console.error("Fornecedor não encontrado:", resposta.status);
                 return null;
             }
 
             return await resposta.json();
 
         } catch (erro) {
-            console.error(
-                "Erro ao buscar fornecedor por ID:",
-                erro
-            );
+            console.error("Erro ao buscar fornecedor por ID:", erro);
             return null;
         }
     }
 
+    // Cadastrar fornecedor
 
     async function cadastrarFornecedor(fornecedor) {
+
         try {
             const resposta = await fetch(API_URL, {
                 method: "POST",
@@ -66,170 +101,129 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
             if (!resposta.ok) {
-                console.error(
-                    "Erro ao cadastrar fornecedor:",
-                    resposta.status
-                );
+                console.error("Erro ao cadastrar fornecedor:", resposta.status);
                 return false;
             }
 
-            const novoFornecedor = await resposta.json();
-
-            console.log(
-                "Fornecedor cadastrado:",
-                novoFornecedor
-            );
+            await resposta.json();
 
             await buscarFornecedores();
 
             return true;
 
         } catch (erro) {
-            console.error(
-                "Erro na requisição POST:",
-                erro
-            );
+            console.error("Erro na requisição POST:", erro);
             return false;
         }
     }
 
+    // Atualizar fornecedor
 
     async function atualizarFornecedor(id, fornecedor) {
+
         try {
-            const resposta =
-                await fetch(`${API_URL}/${id}`, {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(fornecedor)
-                });
+            const resposta = await fetch(`${API_URL}/${id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(fornecedor)
+            });
 
             if (!resposta.ok) {
-                console.error(
-                    "Erro ao atualizar fornecedor:",
-                    resposta.status
-                );
+                console.error("Erro ao atualizar fornecedor:", resposta.status);
                 return false;
             }
 
-            const fornecedorAtualizado =
-                await resposta.json();
-
-            console.log(
-                "Fornecedor atualizado:",
-                fornecedorAtualizado
-            );
+            await resposta.json();
 
             await buscarFornecedores();
 
             return true;
 
         } catch (erro) {
-            console.error(
-                "Erro na requisição PUT:",
-                erro
-            );
+            console.error("Erro na requisição PUT:", erro);
             return false;
         }
     }
 
+    // Excluir fornecedor
 
     async function excluirFornecedor(id) {
+
+        const confirmar = confirm("Deseja realmente excluir este fornecedor?");
+
+        if (!confirmar) {
+            return;
+        }
+
         try {
-            const resposta =
-                await fetch(`${API_URL}/${id}`, {
-                    method: "DELETE"
-                });
+            const resposta = await fetch(`${API_URL}/${id}`, {
+                method: "DELETE"
+            });
 
             if (!resposta.ok) {
-                console.error(
-                    "Erro ao excluir fornecedor:",
-                    resposta.status
-                );
+                console.error("Erro ao excluir fornecedor:", resposta.status);
+                alert("Não foi possível excluir o fornecedor.");
                 return;
             }
 
-            console.log(
-                "Fornecedor excluído:",
-                id
-            );
-
             await buscarFornecedores();
 
         } catch (erro) {
-            console.error(
-                "Erro na requisição DELETE:",
-                erro
-            );
+            console.error("Erro na requisição DELETE:", erro);
         }
     }
 
-
-    // Elementos
-
-    const lista =
-        document.getElementById("listaFornecedores");
-
-    const contador =
-        document.getElementById("contador");
-
-    const botaoSalvar =
-        document.getElementById("btnSalvarFornecedor");
-
-    const tituloFormulario =
-        document.getElementById("tituloFormulario");
-
-
-    if (!lista || !contador) {
-        console.error(
-            "Erro: elementos principais não encontrados."
-        );
-        return;
-    }
-
-
-    // Lista
+    // Gerar estrelas
 
     function gerarEstrelas(avaliacao) {
-        if (!avaliacao || avaliacao === "-") {
+
+        const quantidade = Number(avaliacao);
+
+        if (!Number.isInteger(quantidade) || quantidade < 1 || quantidade > 5) {
             return "-";
         }
 
-        return "★".repeat(Number(avaliacao));
+        return "★".repeat(quantidade);
     }
 
+    // Atualizar lista
 
     function atualizarLista(fornecedores) {
+
         lista.innerHTML = "";
 
-        if (fornecedores.length === 0) {
+        if (!Array.isArray(fornecedores) || fornecedores.length === 0) {
             contador.textContent = "0 fornecedores";
             return;
         }
 
         fornecedores.forEach(function (fornecedor) {
 
-            const item =
-                document.createElement("div");
+            const item = document.createElement("div");
 
             item.classList.add("fornecedor-item");
 
             item.innerHTML = `
+                <div class="fornecedor-dado fornecedor-id">
+                    ${escaparHTML(fornecedor.id)}
+                </div>
+
                 <div class="fornecedor-dado fornecedor-nome">
-                    ${fornecedor.nome}
+                    ${escaparHTML(fornecedor.nome)}
                 </div>
 
                 <div class="fornecedor-dado fornecedor-cnpj">
-                    ${fornecedor.cnpj}
+                    ${escaparHTML(fornecedor.cnpj)}
                 </div>
 
                 <div class="fornecedor-dado fornecedor-telefone">
-                    ${fornecedor.telefone}
+                    ${escaparHTML(fornecedor.telefone)}
                 </div>
 
                 <div class="fornecedor-dado fornecedor-cidade">
-                    ${fornecedor.cidade}
+                    ${escaparHTML(fornecedor.cidade)}
                 </div>
 
                 <div class="fornecedor-dado fornecedor-avaliacao">
@@ -237,27 +231,31 @@ document.addEventListener("DOMContentLoaded", function () {
                 </div>
 
                 <div class="fornecedor-dado fornecedor-status">
-                    <span class="status ${fornecedor.statusClass || "status-ok"}">
-                        ${fornecedor.status || "Ativo"}
+                    <span class="status ${fornecedor.statusClass === "status-warning" ? "status-warning" : "status-ok"}">
+                        ${escaparHTML(fornecedor.status || "Ativo")}
                     </span>
                 </div>
 
                 <div class="fornecedor-acoes">
-                    <button
-                        type="button"
-                        class="btn-editar"
-                        onclick="editarFornecedor('${fornecedor.id}')">
+                    <button type="button" class="btn-editar">
                         Editar
                     </button>
 
-                    <button
-                        type="button"
-                        class="btn-excluir"
-                        onclick="excluirFornecedor('${fornecedor.id}')">
+                    <button type="button" class="btn-excluir">
                         Excluir
                     </button>
                 </div>
             `;
+
+            const botoes = item.querySelectorAll("button");
+
+            botoes[0].addEventListener("click", function () {
+                editarFornecedor(fornecedor.id);
+            });
+
+            botoes[1].addEventListener("click", function () {
+                excluirFornecedor(fornecedor.id);
+            });
 
             lista.appendChild(item);
         });
@@ -268,295 +266,221 @@ document.addEventListener("DOMContentLoaded", function () {
                 : fornecedores.length + " fornecedores";
     }
 
+    // Editar fornecedor
 
     async function editarFornecedor(id) {
-        const fornecedor =
-            await buscarFornecedorPorId(id);
+
+        const fornecedor = await buscarFornecedorPorId(id);
 
         if (!fornecedor) {
             alert("Fornecedor não encontrado.");
             return;
         }
 
-        document.getElementById("nome").value =
-            fornecedor.nome || "";
-
-        document.getElementById("cnpj").value =
-            fornecedor.cnpj || "";
-
-        document.getElementById("telefone").value =
-            fornecedor.telefone || "";
-
-        document.getElementById("email").value =
-            fornecedor.email || "";
-
-        document.getElementById("cidade").value =
-            fornecedor.cidade || "";
-
-        document.getElementById("avaliacao").value =
-            fornecedor.avaliacao || "";
+        campoNome.value = fornecedor.nome || "";
+        campoCnpj.value = fornecedor.cnpj || "";
+        campoTelefone.value = fornecedor.telefone || "";
+        document.getElementById("email").value = fornecedor.email || "";
+        campoCidade.value = fornecedor.cidade || "";
+        document.getElementById("avaliacao").value = fornecedor.avaliacao || "";
 
         window.fornecedorEditandoId = id;
 
-        tituloFormulario.textContent =
-            "Editar Fornecedor";
+        tituloFormulario.textContent = "Editar Fornecedor";
+        botaoSalvar.textContent = "Atualizar Fornecedor";
 
-        botaoSalvar.textContent =
-            "Atualizar Fornecedor";
-
-        document.getElementById("nome").focus();
+        campoNome.focus();
     }
 
+    // Disponibilizar funções para os botões
 
-    window.buscarFornecedorPorId =
-        buscarFornecedorPorId;
-
-    window.cadastrarFornecedor =
-        cadastrarFornecedor;
-
-    window.atualizarFornecedor =
-        atualizarFornecedor;
-
-    window.editarFornecedor =
-        editarFornecedor;
-
-    window.excluirFornecedor =
-        excluirFornecedor;
-
-    window.gerarEstrelas =
-        gerarEstrelas;
-
-
-    buscarFornecedores();
-
-});
-
-document.addEventListener("DOMContentLoaded", function () {
+    window.buscarFornecedorPorId = buscarFornecedorPorId;
+    window.cadastrarFornecedor = cadastrarFornecedor;
+    window.atualizarFornecedor = atualizarFornecedor;
+    window.editarFornecedor = editarFornecedor;
+    window.excluirFornecedor = excluirFornecedor;
+    window.gerarEstrelas = gerarEstrelas;
 
     // Formulário
 
-    const form =
-        document.getElementById("formFornecedor");
+    form.addEventListener("submit", async function (event) {
 
-    const botaoSalvar =
-        document.getElementById("btnSalvarFornecedor");
+        event.preventDefault();
 
-    const tituloFormulario =
-        document.getElementById("tituloFormulario");
+        const nome = campoNome.value.trim();
+        const cnpj = campoCnpj.value.trim();
+        const telefone = campoTelefone.value.trim();
+        const email = document.getElementById("email").value.trim();
+        const cidade = campoCidade.value.trim();
+        const avaliacao = document.getElementById("avaliacao").value;
 
+        if (
+            nome === "" ||
+            cnpj === "" ||
+            telefone === "" ||
+            email === "" ||
+            cidade === "" ||
+            avaliacao === ""
+        ) {
+            alert("Preencha todos os campos!");
+            return;
+        }
 
-    form.addEventListener(
-        "submit",
-        async function (event) {
+        // Validar nome
 
-            event.preventDefault();
+        if (!/^[A-Za-zÀ-ÿ0-9\s&.,'()/\-]+$/.test(nome)) {
+            alert("Digite um nome de fornecedor válido!");
+            return;
+        }
 
-            const nome =
-                document.getElementById("nome").value.trim();
+        // Validar CNPJ
 
-            const cnpj =
-                document.getElementById("cnpj").value.trim();
+        const cnpjNumeros = cnpj.replace(/\D/g, "");
 
-            const telefone =
-                document.getElementById("telefone").value.trim();
+        if (cnpjNumeros.length !== 14) {
+            alert("O CNPJ deve conter 14 números!");
+            return;
+        }
 
-            const email =
-                document.getElementById("email").value.trim();
+        // Validar telefone
 
-            const cidade =
-                document.getElementById("cidade").value.trim();
+        const telefoneNumeros = telefone.replace(/\D/g, "");
 
-            const avaliacao =
-                document.getElementById("avaliacao").value;
+        if (
+            telefoneNumeros.length < 10 ||
+            telefoneNumeros.length > 11
+        ) {
+            alert("O telefone deve conter 10 ou 11 números!");
+            return;
+        }
 
-            if (
-                nome === "" ||
-                cnpj === "" ||
-                telefone === "" ||
-                email === "" ||
-                cidade === "" ||
-                avaliacao === ""
-            ) {
-                alert("Preencha todos os campos!");
-                return;
+        // Validar e-mail
+
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            alert("Digite um e-mail válido!");
+            return;
+        }
+
+        // Validar cidade
+
+        if (!/^[A-Za-zÀ-ÿ\s'-]+$/.test(cidade)) {
+            alert("Digite uma cidade válida!");
+            return;
+        }
+
+        const fornecedor = {
+            nome: nome,
+            cnpj: cnpjNumeros,
+            telefone: telefoneNumeros,
+            email: email,
+            cidade: cidade,
+            avaliacao: avaliacao,
+            status: "Ativo",
+            statusClass: "status-ok"
+        };
+
+        if (window.fornecedorEditandoId !== null) {
+
+            const sucesso = await atualizarFornecedor(
+                window.fornecedorEditandoId,
+                fornecedor
+            );
+
+            if (sucesso) {
+
+                alert("Fornecedor atualizado com sucesso!");
+
+                window.fornecedorEditandoId = null;
+
+                form.reset();
+
+                botaoSalvar.textContent = "Cadastrar Fornecedor";
+                tituloFormulario.textContent = "Novo Fornecedor";
             }
 
-            // Validar nome
-            if (!/^[A-Za-zÀ-ÿ\s]+$/.test(nome)) {
-                alert("O nome deve conter apenas letras e espaços!");
-                return;
-            }
+        } else {
 
-            // Validar CNPJ
-            const cnpjNumeros = cnpj.replace(/\D/g, "");
+            const sucesso = await cadastrarFornecedor(fornecedor);
 
-            if (cnpjNumeros.length !== 14) {
-                alert("O CNPJ deve conter 14 números!");
-                return;
-            }
-
-            // Validar telefone
-            const telefoneNumeros = telefone.replace(/\D/g, "");
-
-            if (
-                telefoneNumeros.length < 10 ||
-                telefoneNumeros.length > 11
-            ) {
-                alert("O telefone deve conter 10 ou 11 números!");
-                return;
-            }
-
-            // Validar e-mail
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                alert("Digite um e-mail válido!");
-                return;
-            }
-
-            // Validar cidade
-            if (!/^[A-Za-zÀ-ÿ\s'-]+$/.test(cidade)) {
-                alert("A cidade deve conter apenas letras e espaços!");
-                return;
-            }
-
-            const fornecedor = {
-                nome: nome,
-                cnpj: cnpj,
-                telefone: telefone,
-                email: email,
-                cidade: cidade,
-                avaliacao: avaliacao,
-                status: "Ativo",
-                statusClass: "status-ok"
-            };
-
-            if (window.fornecedorEditandoId) {
-
-                const sucesso =
-                    await window.atualizarFornecedor(
-                        window.fornecedorEditandoId,
-                        fornecedor
-                    );
-
-                if (sucesso) {
-                    alert(
-                        "Fornecedor atualizado com sucesso!"
-                    );
-
-                    window.fornecedorEditandoId = null;
-                    form.reset();
-
-                    botaoSalvar.textContent =
-                        "Cadastrar Fornecedor";
-
-                    tituloFormulario.textContent =
-                        "Novo Fornecedor";
-                }
-
-            } else {
-
-                const sucesso =
-                    await window.cadastrarFornecedor(fornecedor);
-
-                if (sucesso) {
-                    alert(
-                        "Fornecedor cadastrado com sucesso!"
-                    );
-
-                    form.reset();
-                }
+            if (sucesso) {
+                alert("Fornecedor cadastrado com sucesso!");
+                form.reset();
             }
         }
-    );
-
+    });
 
     // Busca por ID
 
-    const botaoBuscar =
-        document.getElementById("btnBuscarFornecedor");
+    botaoBuscar.addEventListener("click", async function () {
 
-    const inputId =
-        document.getElementById("idFornecedor");
+        const id = inputId.value.trim();
 
-    const resultadoFornecedor =
-        document.getElementById("resultadoFornecedor");
+        if (!/^[1-9]\d*$/.test(id)) {
+            alert("Digite um ID numérico válido.");
+            return;
+        }
 
+        const fornecedor = await buscarFornecedorPorId(id);
 
-    botaoBuscar.addEventListener(
-        "click",
-        async function () {
-
-            const id =
-                inputId.value.trim();
-
-            if (id === "") {
-                alert("Digite o ID do fornecedor.");
-                return;
-            }
-
-            const fornecedor =
-                await window.buscarFornecedorPorId(id);
-
-            if (!fornecedor) {
-                resultadoFornecedor.innerHTML = `
-                    <div class="resultado-fornecedor">
-                        <strong>Fornecedor não encontrado.</strong>
-                    </div>
-                `;
-                return;
-            }
+        if (!fornecedor) {
 
             resultadoFornecedor.innerHTML = `
                 <div class="resultado-fornecedor">
-                    <strong>ID:</strong> ${fornecedor.id}<br>
-                    <strong>Nome:</strong> ${fornecedor.nome}<br>
-                    <strong>CNPJ:</strong> ${fornecedor.cnpj}<br>
-                    <strong>Telefone:</strong> ${fornecedor.telefone}<br>
-                    <strong>E-mail:</strong> ${fornecedor.email}<br>
-                    <strong>Cidade:</strong> ${fornecedor.cidade}<br>
-                    <strong>Avaliação:</strong>
-                    ${window.gerarEstrelas(fornecedor.avaliacao)}<br>
-                    <strong>Status:</strong>
-                    ${fornecedor.status || "Ativo"}
+                    <strong>Fornecedor não encontrado.</strong>
                 </div>
             `;
+
+            return;
         }
-    );
+
+        resultadoFornecedor.innerHTML = `
+            <div class="resultado-fornecedor">
+                <strong>ID:</strong> ${escaparHTML(fornecedor.id)}<br>
+                <strong>Nome:</strong> ${escaparHTML(fornecedor.nome)}<br>
+                <strong>CNPJ:</strong> ${escaparHTML(fornecedor.cnpj)}<br>
+                <strong>Telefone:</strong> ${escaparHTML(fornecedor.telefone)}<br>
+                <strong>E-mail:</strong> ${escaparHTML(fornecedor.email)}<br>
+                <strong>Cidade:</strong> ${escaparHTML(fornecedor.cidade)}<br>
+                <strong>Avaliação:</strong>
+                ${gerarEstrelas(fornecedor.avaliacao)}<br>
+                <strong>Status:</strong>
+                ${escaparHTML(fornecedor.status || "Ativo")}
+            </div>
+        `;
+    });
 
     // Campos do formulário
-    const campoNome = document.getElementById("nome");
-    const campoCidade = document.getElementById("cidade");
-    const campoCnpj = document.getElementById("cnpj");
-    const campoTelefone = document.getElementById("telefone");
 
-    // Nome: letras e espaços, sempre maiúsculo
     campoNome.addEventListener("input", function () {
+
         this.value = this.value
-            .replace(/[^A-Za-zÀ-ÿ\s]/g, "")
+            .replace(/[^A-Za-zÀ-ÿ0-9\s&.,'()/\-]/g, "")
             .toLocaleLowerCase("pt-BR")
             .replace(/(^|\s)\S/g, function (letra) {
                 return letra.toLocaleUpperCase("pt-BR");
             });
-
     });
 
-    // Cidade: letras e espaços, sempre maiúsculo
     campoCidade.addEventListener("input", function () {
+
         this.value = this.value
-            .replace(/[^A-Za-zÀ-ÿ\s]/g, "")
+            .replace(/[^A-Za-zÀ-ÿ\s'-]/g, "")
             .toLocaleLowerCase("pt-BR")
             .replace(/(^|\s)\S/g, function (letra) {
                 return letra.toLocaleUpperCase("pt-BR");
             });
     });
 
-    // CNPJ: somente números, máximo 14
     campoCnpj.addEventListener("input", function () {
         this.value = this.value.replace(/\D/g, "").slice(0, 14);
     });
 
-    // Telefone: somente números, máximo 11
     campoTelefone.addEventListener("input", function () {
         this.value = this.value.replace(/\D/g, "").slice(0, 11);
     });
+
+    // Carregar fornecedores ao abrir a página
+
+    buscarFornecedores();
 
 });
