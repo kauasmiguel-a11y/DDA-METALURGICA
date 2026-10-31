@@ -145,7 +145,7 @@ function mostrarPastilhas() {
             <div class="pastilha-info">
 
                 <strong>
-                    ${pastilha.codigo}
+                    ${pastilha.codigo.replace(/^codigo/i, "Código")}
                 </strong>
 
                 <span>
