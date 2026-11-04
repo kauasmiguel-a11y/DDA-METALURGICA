@@ -1,5 +1,5 @@
 
-const API_URL = "https://6abb0663b2118ed7abb7de1b.mockapi.io/dda-metalurgica/pastilhas";
+const API_URL = "https://6abafbac5b549d818d62c1c5.mockapi.io/dda-metalurgica/pastilhas";
 
 const corpoRelatorio = document.getElementById("corpo-relatorio");
 

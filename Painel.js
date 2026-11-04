@@ -1,436 +1,181 @@
-const CHAVE_PASTILHAS = "pastilhasDDA";
+const API_URL = "https://6abafbac5b549d818d62c1c5.mockapi.io/dda-metalurgica/pastilhas";
+
 const CHAVE_MOVIMENTACOES = "movimentacoesDDA";
 
+// BUSCAR PASTILHAS NA API
+async function obterPastilhas() {
+    try {
+        const resposta = await fetch(API_URL);
 
-const totalItens =
-    document.getElementById("total-itens");
+        if (!resposta.ok) {
+            throw new Error(`Erro HTTP: ${resposta.status}`);
+        }
 
-const estoqueOk =
-    document.getElementById("estoque-ok");
+        return await resposta.json();
 
-const estoqueBaixo =
-    document.getElementById("estoque-baixo");
-
-const estoqueCritico =
-    document.getElementById("estoque-critico");
-
-
-const listaAlertas =
-    document.getElementById("lista-alertas");
-
-const listaMovimentacoes =
-    document.getElementById("lista-movimentacoes");
-
-
-function obterPastilhas() {
-
-    const dados =
-        localStorage.getItem(
-            CHAVE_PASTILHAS
-        );
-
-
-    if (dados) {
-
-        return JSON.parse(dados);
-
+    } catch (erro) {
+        console.error("Não foi possível consultar as pastilhas:", erro);
+        return null;
     }
-
-
-    return [];
 }
 
+// MESMA REGRA DA PÁGINA DE PASTILHAS
+function verificarStatus(quantidade, minimo) {
+    quantidade = Number(quantidade);
+    minimo = Number(minimo);
 
-function obterMovimentacoes() {
-
-    const dados =
-        localStorage.getItem(
-            CHAVE_MOVIMENTACOES
-        );
-
-
-    if (dados) {
-
-        return JSON.parse(dados);
-
+    if (quantidade >= minimo) {
+        return { status: "OK", classeStatus: "status-ok" };
     }
 
+    if (quantidade > minimo * 0.5) {
+        return { status: "Baixo", classeStatus: "status-warning" };
+    }
 
-    return [];
+    return { status: "Crítico", classeStatus: "status-critical" };
 }
 
-
-function verificarStatus(pastilha) {
-
-    if (
-        pastilha.quantidade >=
-        pastilha.minimo
-    ) {
-
-        return "OK";
-
-    }
-
-
-    if (
-        pastilha.quantidade >
-        pastilha.minimo * 0.5
-    ) {
-
-        return "Baixo";
-
-    }
-
-
-    return "Crítico";
+// MESMO FORMATO DE CÓDIGO DA PÁGINA DE PASTILHAS
+function formatarCodigo(codigo) {
+    return String(codigo ?? "-").replace(/^codigo/i, "Código");
 }
 
-
+// ATUALIZAR CARDS
 function atualizarResumo(pastilhas) {
-
-    let total = pastilhas.length;
-
     let ok = 0;
-
     let baixo = 0;
-
     let critico = 0;
 
+    pastilhas.forEach(p => {
+        const { status } = verificarStatus(p.quantidade, p.minimo);
 
-    for (
-        let i = 0;
-        i < pastilhas.length;
-        i++
-    ) {
+        if (status === "OK") ok++;
+        else if (status === "Baixo") baixo++;
+        else critico++;
+    });
 
-        const status =
-            verificarStatus(
-                pastilhas[i]
-            );
-
-
-        if (status === "OK") {
-
-            ok++;
-
-        } else if (status === "Baixo") {
-
-            baixo++;
-
-        } else {
-
-            critico++;
-
-        }
-
-    }
-
-
-    totalItens.textContent =
-        total;
-
-    estoqueOk.textContent =
-        ok;
-
-    estoqueBaixo.textContent =
-        baixo;
-
-    estoqueCritico.textContent =
-        critico;
+    document.getElementById("total-itens").textContent = pastilhas.length;
+    document.getElementById("estoque-ok").textContent = ok;
+    document.getElementById("estoque-baixo").textContent = baixo;
+    document.getElementById("estoque-critico").textContent = critico;
 }
 
-
+// ATUALIZAR ALERTAS
 function atualizarAlertas(pastilhas) {
+    const lista = document.getElementById("lista-alertas");
 
-    listaAlertas.innerHTML = "";
+    lista.innerHTML = "";
 
-    let encontrouAlerta = false;
+    const alertas = pastilhas
+        .map(p => ({ pastilha: p, ...verificarStatus(p.quantidade, p.minimo) }))
+        .filter(a => a.status !== "OK")
+        .sort((a, b) => {
+            // críticos primeiro, depois os de menor quantidade
+            if (a.status !== b.status) return a.status === "Crítico" ? -1 : 1;
+            return Number(a.pastilha.quantidade) - Number(b.pastilha.quantidade);
+        });
 
-
-    for (
-        let i = 0;
-        i < pastilhas.length;
-        i++
-    ) {
-
-        const pastilha =
-            pastilhas[i];
-
-
-        const status =
-            verificarStatus(
-                pastilha
-            );
-
-
-        if (status !== "OK") {
-
-            encontrouAlerta = true;
-
-
-            const alerta =
-                document.createElement("div");
-
-
-            alerta.classList.add(
-                "alert"
-            );
-
-
-            if (status === "Crítico") {
-
-                alerta.classList.add(
-                    "alert-critical"
-                );
-
-            } else {
-
-                alerta.classList.add(
-                    "alert-warning"
-                );
-
-            }
-
-
-            const conteudo =
-                document.createElement("div");
-
-
-            conteudo.classList.add(
-                "alert-content"
-            );
-
-
-            const nome =
-                document.createElement("strong");
-
-
-            nome.textContent =
-                pastilha.descricao;
-
-
-            const informacao =
-                document.createElement("span");
-
-
-            informacao.textContent =
-                `Quantidade: ${pastilha.quantidade} | Mínimo: ${pastilha.minimo}`;
-
-
-            conteudo.appendChild(
-                nome
-            );
-
-
-            conteudo.appendChild(
-                informacao
-            );
-
-
-            const statusElemento =
-                document.createElement("span");
-
-
-            statusElemento.classList.add(
-                "status"
-            );
-
-
-            statusElemento.textContent =
-                status;
-
-
-            alerta.appendChild(
-                conteudo
-            );
-
-
-            alerta.appendChild(
-                statusElemento
-            );
-
-
-            listaAlertas.appendChild(
-                alerta
-            );
-
-        }
-
+    if (alertas.length === 0) {
+        lista.innerHTML = "<li>Nenhum alerta de estoque no momento.</li>";
+        return;
     }
 
+    alertas.forEach(({ pastilha, status, classeStatus }) => {
+        const item = document.createElement("li");
+        item.className = status === "Crítico" ? "critico" : "baixo";
 
-    if (!encontrouAlerta) {
+        const info = document.createElement("div");
+        info.className = "alerta-info";
 
-        const mensagem =
-            document.createElement("p");
+        const codigo = document.createElement("strong");
+        codigo.textContent = formatarCodigo(pastilha.codigo);
 
+        const nome = document.createElement("span");
+        nome.textContent = pastilha.nome || "Pastilha sem nome";
 
-        mensagem.textContent =
-            "Nenhum alerta de estoque.";
+        const detalhes = document.createElement("span");
+        detalhes.textContent =
+            `Quantidade: ${pastilha.quantidade} | Mínimo: ${pastilha.minimo}`;
 
+        info.append(codigo, nome, detalhes);
 
-        listaAlertas.appendChild(
-            mensagem
-        );
+        const badge = document.createElement("span");
+        badge.className = `status ${classeStatus}`;
+        badge.textContent = status;
 
-    }
-
+        item.append(info, badge);
+        lista.appendChild(item);
+    });
 }
 
-
+// ATUALIZAR MOVIMENTAÇÕES (mesma chave do localStorage das pastilhas)
 function atualizarMovimentacoes() {
+    const tabela = document.getElementById("lista-movimentacoes");
 
-    const movimentacoes =
-        obterMovimentacoes();
+    let movimentacoes = [];
 
+    try {
+        movimentacoes = JSON.parse(localStorage.getItem(CHAVE_MOVIMENTACOES)) || [];
+    } catch (erro) {
+        console.error("Movimentações inválidas no localStorage:", erro);
+    }
 
-    listaMovimentacoes.innerHTML =
-        "";
-
+    tabela.innerHTML = "";
 
     if (movimentacoes.length === 0) {
-
-        const linha =
-            document.createElement("tr");
-
-
-        linha.innerHTML = `
-            <td colspan="4">
-                Nenhuma movimentação registrada.
-            </td>
+        tabela.innerHTML = `
+            <tr>
+                <td colspan="4">Nenhuma movimentação registrada.</td>
+            </tr>
         `;
+        return;
+    }
 
+    const ultimas = [...movimentacoes].reverse().slice(0, 5);
 
-        listaMovimentacoes.appendChild(
-            linha
-        );
+    ultimas.forEach(movimentacao => {
+        const linha = document.createElement("tr");
 
+        const valores = [
+            movimentacao.data,
+            formatarCodigo(movimentacao.pastilha),
+            movimentacao.tipo,
+            movimentacao.quantidade
+        ];
+
+        valores.forEach(valor => {
+            const celula = document.createElement("td");
+            celula.textContent = valor ?? "-";
+            linha.appendChild(celula);
+        });
+
+        tabela.appendChild(linha);
+    });
+}
+
+// ATUALIZAR DASHBOARD
+async function atualizarDashboard() {
+    const pastilhas = await obterPastilhas();
+
+    atualizarMovimentacoes();
+
+    if (pastilhas === null) {
+        ["total-itens", "estoque-ok", "estoque-baixo", "estoque-critico"]
+            .forEach(id => document.getElementById(id).textContent = "-");
+
+        document.getElementById("lista-alertas").innerHTML =
+            "<li>Não foi possível carregar os dados do estoque.</li>";
 
         return;
     }
 
-
-    for (
-        let i = 0;
-        i < movimentacoes.length && i < 5;
-        i++
-    ) {
-
-        const movimentacao =
-            movimentacoes[i];
-
-
-        const linha =
-            document.createElement("tr");
-
-
-        const quantidade =
-            movimentacao.quantidade;
-
-
-        let quantidadeExibida =
-            quantidade;
-
-
-        if (
-            movimentacao.tipo === "Entrada"
-        ) {
-
-            quantidadeExibida =
-                "+" + quantidade;
-
-        } else {
-
-            quantidadeExibida =
-                "-" + quantidade;
-
-        }
-
-
-        linha.innerHTML = `
-            <td>
-                ${movimentacao.data}
-            </td>
-
-            <td>
-                ${movimentacao.pastilha}
-            </td>
-
-            <td>
-                ${movimentacao.tipo}
-            </td>
-
-            <td>
-                ${quantidadeExibida}
-            </td>
-        `;
-
-
-        listaMovimentacoes.appendChild(
-            linha
-        );
-
-    }
-
+    atualizarResumo(pastilhas);
+    atualizarAlertas(pastilhas);
 }
 
+// INICIALIZAR
+document.addEventListener("DOMContentLoaded", atualizarDashboard);
 
-function atualizarDashboard() {
-
-    const pastilhas =
-        obterPastilhas();
-
-
-    atualizarResumo(
-        pastilhas
-    );
-
-
-    atualizarAlertas(
-        pastilhas
-    );
-
-
-    atualizarMovimentacoes();
-
-}
-
-
-/*
-    Atualiza o Dashboard quando
-    outra aba alterar o localStorage.
-*/
-
-window.addEventListener(
-    "storage",
-    function (event) {
-
-        if (
-            event.key === CHAVE_PASTILHAS ||
-            event.key === CHAVE_MOVIMENTACOES
-        ) {
-
-            atualizarDashboard();
-
-        }
-
-    }
-);
-
-
-/*
-    Atualiza quando receber
-    o aviso de estoque atualizado.
-*/
-
-window.addEventListener(
-    "estoqueAtualizado",
-    function () {
-
-        atualizarDashboard();
-
-    }
-);
-
-
-atualizarDashboard();
+// ATUALIZAR AO VOLTAR PARA A ABA OU QUANDO OUTRA ABA REGISTRAR ENTRADA
+window.addEventListener("focus", atualizarDashboard);
+window.addEventListener("storage", atualizarDashboard);
