@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -6,16 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Relatórios | DDA Metalúrgica</title>
     <link rel="stylesheet" href="relatorios.css">
+    <script src="relatorios.js" defer></script>
 </head>
 <body>
-    
+
     <header class="site-header">
         <div class="header-container">
             <div class="logo">
                 <h1>DDA Metalúrgica</h1>
                 <span>Sistema de Controle de Estoque</span>
             </div>
-            
+
             <nav class="main-nav">
                 <a href="index.html">Dashboard</a>
                 <a href="pastilhas.html">Pastilhas</a>
@@ -24,48 +24,48 @@
             </nav>
         </div>
     </header>
-    
+
     <main class="main-container">
-        
+
         <section class="page-header">
             <div class="page-title">
                 <h2>Relatórios</h2>
                 <p>Crie, edite e imprima relatórios do estoque.</p>
             </div>
         </section>
-        
-        <section class="editor-painel">
+
+        <section class="editor-panel">
             <h3>Informações do relatório</h3>
-            
+
             <div class="editor-fields">
-                
+
                 <div class="field">
                     <label for="titulo-relatorio">Título</label>
                     <input
-                    type="text"
-                    id="titulo-relatorio"
-                    value="Relatório de Estoque"
+                        type="text"
+                        id="titulo-relatorio"
+                        value="Relatório de Estoque"
                     >
                 </div>
-                
+
                 <div class="field">
                     <label for="data-relatorio">Data</label>
                     <input type="date" id="data-relatorio">
                 </div>
-                
+
                 <div class="field full">
                     <label for="descricao-relatorio">Descrição</label>
                     <input
-                    type="text"
-                    id="descricao-relatorio"
-                    placeholder="Descreva brevemente o objetivo deste relatório."
+                        type="text"
+                        id="descricao-relatorio"
+                        placeholder="Descreva brevemente o objetivo deste relatório."
                     >
                 </div>
-                
+
             </div>
         </section>
-        
-        <section class="filter-painel no-print">
+
+        <section class="filter-panel no-print">
             <div class="form-group">
                 <label for="filtro-relatorio">Tipo de relatório</label>
                 <select id="filtro-relatorio">
@@ -73,25 +73,21 @@
                     <option value="reposicao">Necessidade de reposição</option>
                 </select>
             </div>
-            
+
             <button type="button" id="btn-atualizar">
                 Carregar estoque
             </button>
         </section>
-        
+
         <section class="report-section">
-            
+
             <div class="section-heading">
                 <div>
                     <h3>Dados do estoque</h3>
                     <p>Edite os campos diretamente na tabela.</p>
                 </div>
-                
-                <button type="button" class="btn-secondary no-print" id="btn-adicionar">
-                    + Adicionar linha
-                </button>
             </div>
-            
+
             <div class="table-container">
                 <table id="tabela-relatorio">
                     <thead>
@@ -102,64 +98,62 @@
                             <th>Mínimo</th>
                             <th>Fornecedor</th>
                             <th>Valor total</th>
-                            <th class="no-print">Ação</th>
                         </tr>
                     </thead>
-                    
+
                     <tbody id="corpo-relatorio">
                         <tr>
-                            <td colspan="7">Carregando estoque...</td>
+                            <td colspan="6">Carregando estoque...</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            
+
             <div class="summary-grid">
-                
+
                 <div class="summary-card">
                     <span>Total de produtos</span>
                     <strong id="total-produtos">0</strong>
                 </div>
-                
+
                 <div class="summary-card">
                     <span>Quantidade em estoque</span>
                     <strong id="total-quantidade">0</strong>
                 </div>
-                
+
                 <div class="summary-card highlight">
                     <span>Valor total do estoque</span>
                     <strong id="valor-total">R$ 0,00</strong>
                 </div>
-                
+
             </div>
-            
+
         </section>
-        
+
         <section class="report-editor observations">
             <h3>Observações e conclusão</h3>
-            
+
             <textarea
-            id="observacoes"
-            placeholder="Escreva aqui as observações e conclusões do relatório..."
+                id="observacoes"
+                placeholder="Escreva aqui as observações e conclusões do relatório..."
             ></textarea>
         </section>
-        
-        <section class="actions-painel no-print">
+
+        <section class="actions-panel no-print">
             <button type="button" class="btn-secondary" id="btn-limpar">
                 Limpar relatório
             </button>
-            
+
             <button type="button" class="btn-primary" id="btn-imprimir">
                 Imprimir relatório
             </button>
         </section>
-        
+
     </main>
-    
+
     <footer class="site-footer">
         <p>© 2026 DDA Metalúrgica - Sistema de Controle de Estoque</p>
     </footer>
-    
-    <script src="./relatorios.js" defer></script>
+
 </body>
 </html>

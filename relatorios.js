@@ -1,4 +1,3 @@
-
 const API_URL = "https://6abafbac5b549d818d62c1c5.mockapi.io/dda-metalurgica/pastilhas";
 
 const corpoRelatorio = document.getElementById("corpo-relatorio");
@@ -43,7 +42,7 @@ async function carregarEstoque() {
     try {
         corpoRelatorio.innerHTML = `
             <tr>
-                <td colspan="7" class="empty-message">
+                <td colspan="6" class="empty-message">
                     Carregando produtos...
                 </td>
             </tr>
@@ -73,7 +72,7 @@ async function carregarEstoque() {
 
         corpoRelatorio.innerHTML = `
             <tr>
-                <td colspan="7" class="empty-message">
+                <td colspan="6" class="empty-message">
                     Erro ao carregar os produtos. Verifique a conexão com a API.
                 </td>
             </tr>
@@ -125,7 +124,7 @@ function renderizarTabela() {
         const linha = document.createElement("tr");
         const coluna = document.createElement("td");
 
-        coluna.colSpan = 7;
+        coluna.colSpan = 6;
         coluna.className = "empty-message";
         coluna.textContent = "Nenhum produto encontrado.";
 
@@ -137,8 +136,6 @@ function renderizarTabela() {
     }
 
     lista.forEach(produto => {
-        const indice = produtos.indexOf(produto);
-
         const linha = document.createElement("tr");
 
         const campos = [
@@ -177,22 +174,6 @@ function renderizarTabela() {
 
         linha.appendChild(colunaValor);
 
-        const colunaAcao = document.createElement("td");
-        colunaAcao.className = "no-print";
-
-        const botaoExcluir = document.createElement("button");
-
-        botaoExcluir.textContent = "Excluir";
-        botaoExcluir.className = "btn-delete";
-
-        botaoExcluir.addEventListener("click", () => {
-            produtos.splice(indice, 1);
-            renderizarTabela();
-        });
-
-        colunaAcao.appendChild(botaoExcluir);
-        linha.appendChild(colunaAcao);
-
         corpoRelatorio.appendChild(linha);
     });
 
@@ -230,23 +211,6 @@ function atualizarResumo() {
     totalQuantidade.textContent = quantidade;
     valorTotal.textContent = formatarMoeda(valor);
 }
-
-// ADICIONAR LINHA
-
-document.getElementById("btn-adicionar").addEventListener("click", () => {
-    produtos.push({
-        codigo: "",
-        nome: "",
-        quantidade: 0,
-        minimo: 0,
-        fornecedor: "",
-        preco: 0
-    });
-
-    filtroRelatorio.value = "todos";
-
-    renderizarTabela();
-});
 
 // ATUALIZAR ESTOQUE
 
