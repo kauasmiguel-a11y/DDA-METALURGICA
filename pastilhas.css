@@ -87,6 +87,45 @@ body {
     padding: 10px 14px;
 }
 
+/* Ver */
+.btn-ver {
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    background-color: #3a4a5a;
+    color: white;
+}
+
+.btn-ver:hover {
+    background-color: #4b5f73;
+}
+
+/* Editar */
+.btn-editar {
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    background-color: #2f80ed;
+    color: white;
+}
+
+.btn-editar:hover {
+    background-color: #1f66c7;
+}
+
+/* Excluir */
+.btn-excluir {
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    background-color: #a83232;
+    color: white;
+}
+
+.btn-excluir:hover {
+    background-color: #8a2626;
+}
+
 /* FILTROS */
 
 .filter-painel {
@@ -291,6 +330,22 @@ body {
     color: #9aa9b8;
     font-size: 13px;
     margin-top: 30px;
+}
+
+.pastilha-acoes button {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+}
+
+.pastilha-acoes button:hover,
+.pastilha-acoes button:focus,
+.pastilha-acoes button:active {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
 }
 
 /* RESPONSIVO */

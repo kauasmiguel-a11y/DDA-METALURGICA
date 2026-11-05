@@ -185,15 +185,21 @@ function mostrarPastilhas() {
             <div class="pastilha-acoes">
 
                 <button class="btn-ver" data-id="${pastilha.id}">
-                    Ver
+                    <strong>
+                        Ver
+                    </strong>
                 </button>
 
                 <button class="btn-editar" data-id="${pastilha.id}">
-                    Editar
+                    <strong>
+                        Editar
+                    </strong>    
                 </button>
 
                 <button class="btn-excluir" data-id="${pastilha.id}">
-                    Excluir
+                    <strong>
+                        Excluir
+                    </strong>
                 </button>
 
             </div>
