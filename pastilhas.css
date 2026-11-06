@@ -85,7 +85,12 @@ body {
     color: white;
     text-decoration: none;
     padding: 10px 14px;
+    border-radius: 6px;
 }
+
+.page-actions a:hover {
+    background-color: #16212c
+};
 
 /* Ver */
 .btn-ver {
