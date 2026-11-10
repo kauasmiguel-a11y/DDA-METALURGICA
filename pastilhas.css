@@ -88,9 +88,9 @@ body {
     border-radius: 6px;
 }
 
-.page-actions a:hover {
-    background-color: #16212c
-};
+.page-actions a:not(.btn-ver):not(.btn-editar):not(.btn-excluir):hover {
+    background-color: #16212c;
+}
 
 /* Ver */
 .btn-ver {
