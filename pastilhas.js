@@ -351,16 +351,54 @@ listaPastilhas.addEventListener(
                 const p = await buscarPastilhaPorId(id);
 
                 detalhe.innerHTML = `
-                    <h3>Detalhe da pastilha ${p.codigo}</h3>
-                    <p>Nome: ${p.nome}</p>
-                    <p>Categoria: ${p.categoria}</p>
-                    <p>Fornecedor: ${p.fornecedor}</p>
-                    <p>Preço: R$ ${p.preco || 0}</p>
-                    <p>Quantidade: ${p.quantidade} (mínimo ${p.minimo})</p>
-                `;
+    <style>
+        .detalhe-card { padding: 22px; }
 
+        .detalhe-card h3 {
+            font-size: 22px;
+            color: #5a9cf8;
+            padding-bottom: 16px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #2c3a47;
+        }
+
+        .detalhe-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+        }
+
+        .detalhe-grid p {
+            background-color: #16212c;
+            border: 1px solid #2c3a47;
+            border-radius: 8px;
+            padding: 14px;
+            font-size: 15px;
+            word-break: break-word;
+        }
+
+        @media (max-width: 800px) {
+            .detalhe-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 500px) {
+            .detalhe-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+
+    <div class="detalhe-card">
+        <h3>Detalhe da pastilha ${p.codigo}</h3>
+
+        <div class="detalhe-grid">
+            <p>Nome: ${p.nome}</p>
+            <p>Categoria: ${p.categoria}</p>
+            <p>Fornecedor: ${p.fornecedor}</p>
+            <p>Preço: R$ ${p.preco || 0}</p>
+            <p>Quantidade: ${p.quantidade} (mínimo ${p.minimo})</p>
+        </div>
+    </div>
+`;
                 detalhe.scrollIntoView();
-
             }
 
 
